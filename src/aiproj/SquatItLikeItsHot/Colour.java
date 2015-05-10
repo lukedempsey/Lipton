@@ -1,4 +1,4 @@
-package aiproj.SquatItLikeItsHot;
+package aiproj.squatItLikeItsHot;
 /**Creating an enum that holds colours 
  * authors - luke dempsey 638407, mason rose-campbell 638370
  * */

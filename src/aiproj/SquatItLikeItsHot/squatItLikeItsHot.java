@@ -1,5 +1,6 @@
-package aiproj.SquatItLikeItsHot;
+package aiproj.squatItLikeItsHot;
 import aiproj.squatter.*;
+
 import java.io.PrintStream;
 
 /**
@@ -18,6 +19,10 @@ public class squatItLikeItsHot implements Player, Piece {
 	private Colour playerColour;
 	private Colour opponentColour; //not sure if you can do this??
 	
+	private static int tallyB = 0;
+	private static int tallyW = 0;
+	private static Boolean gameOver = true;
+	
 	
 	@Override
 	public int init(int n, int p) {
@@ -26,7 +31,9 @@ public class squatItLikeItsHot implements Player, Piece {
 		and p specifies the piece that the player will use (according to the 
 		Piece interface format) as assigned to your class by the referee. 
 		Your implementation of this function should return a negative value 
-		if it does not initialise successfully.*/
+		if it does not initialise successfully.
+		
+		********I think this is all sorted************/
 		
 		board = new Board(n);
 
@@ -77,7 +84,11 @@ public class squatItLikeItsHot implements Player, Piece {
 		 * the game has ended because the opponent move was illegal 
 		 * (e.g., placing a piece on an already occupied or captured cell).
 		*/
-		return 0;
+		
+		//Update game state
+		Board.state(debug, board, gameOver);
+		return Board.returnState(gameOver, tallyB, tallyW);
+
 	}
 
 	@Override
@@ -90,6 +101,25 @@ public class squatItLikeItsHot implements Player, Piece {
 		 * corresponding to a captured Black piece, a captured White piece, or a captured empty cell, 
 		 * respectively.
 		*/
+	}
+	
+	public static int getTallyB() {
+		return tallyB;
+	}
+	public static void setTallyB(int tallyB) {
+		squatItLikeItsHot.tallyB = tallyB;
+	}
+	public static int getTallyW() {
+		return tallyW;
+	}
+	public static void setTallyW(int tallyW) {
+		squatItLikeItsHot.tallyW = tallyW;
+	}
+	public static Boolean getGameOver() {
+		return gameOver;
+	}
+	public static void setGameOver(Boolean gameOver) {
+		squatItLikeItsHot.gameOver = gameOver;
 	}
 
 }

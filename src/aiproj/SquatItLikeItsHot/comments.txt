@@ -1,1 +1,2 @@
 Luke - not sure how to categorise colours, thinking Colours.enum
+Luke - squatIt.makeMove(), return as object MOVE, what is P in move.java?
