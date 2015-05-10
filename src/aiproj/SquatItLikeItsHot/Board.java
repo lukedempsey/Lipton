@@ -15,7 +15,7 @@ public class Board {
 	private int boardDims;
 	private static int[][] cells;
 	
-	private boolean debug = false;
+	private static boolean debug = false;
 	
 	/** Creates a new Board object
 	 * @param n 
@@ -63,18 +63,8 @@ public class Board {
 			col=0;
 		}
 	}
-
-	/** Finds the current game state by searching through the board
-	 * @param debug Boolean to turn debugging mode on and off
-	 * @param board Data will be examined about this board
-	 * @param gameOver Whether or not the game has finished or not
-	 */
-	public static void state(Boolean debug, Board board, Boolean gameOver) {
-		//TODO fix this sloppy initialisation
-		int lastCol = Piece.INVALID;
-		
-		//Search for a captured point
-		//Skip cells on bottom & right edges
+	
+	public static boolean checkGameOver(Board board){
 		for(int row = 0; row < (board.getBoardDims()-1); row++){
 			for(int col = 0; col < (board.getBoardDims()-1); col++){
 				
@@ -89,7 +79,29 @@ public class Board {
 					
 					//change game state to not over
 					squatItLikeItsHot.setGameOver(false);
+					return false;
 				}
+			}
+		}
+		return true;
+	}
+
+	/** Finds the current game state by searching through the board
+	 * @param debug Boolean to turn debugging mode on and off
+	 * @param board Data will be examined about this board
+	 * @param gameOver Whether or not the game has finished or not
+	 */
+	public static void state(Boolean debug, Board board, Boolean gameOver) {
+		//TODO fix this sloppy initialisation
+		int lastCol = Piece.INVALID;
+		
+		//Check for game over
+		checkGameOver(board);
+		
+		//Search for a captured point
+		//Skip cells on bottom & right edges
+		for(int row = 0; row < (board.getBoardDims()-1); row++){
+			for(int col = 0; col < (board.getBoardDims()-1); col++){
 				
 				//Check if captured
 				if (board.getCells()[row][col]==Piece.DEAD){

@@ -16,12 +16,17 @@ public class squatItLikeItsHot implements Player, Piece {
 	
 	//Initialises game variables
 	private static Boolean debug = false;
+	public int getPlayerColour() {
+		return playerColour;
+	}
+
+	
 	private int playerColour;
 	private int opponentColour; //not sure if you can do this??
 	
 	private static int tallyB = 0;
 	private static int tallyW = 0;
-	private static Boolean gameOver = true;
+	private static Boolean gameOver = false;
 
 	
 	
@@ -39,11 +44,11 @@ public class squatItLikeItsHot implements Player, Piece {
 		board = new Board(n);
 
 		if(p==1){
-			playerColour = Piece.WHITE;
-			opponentColour = Piece.BLACK;
+			setPlayerColour(Piece.WHITE);
+			setOpponentColour(Piece.BLACK);
 		}else if(p==2){
-			playerColour = Piece.BLACK;
-			opponentColour = Piece.WHITE;
+			setPlayerColour(Piece.BLACK);
+			setOpponentColour(Piece.WHITE);
 		}else{
 			//invalid input p != 1 or 2
 			return -1;
@@ -92,6 +97,7 @@ public class squatItLikeItsHot implements Player, Piece {
 		 */
 		int row = m.Row;
 		int col = m.Col;
+		int piece = m.P;
 		
 		int[][] currentBoard = board.getCells();
 		
@@ -99,15 +105,18 @@ public class squatItLikeItsHot implements Player, Piece {
 		//TODO is this the only illegal move? 
 		//Account for captured territories
 		//Account for wrong colour placed
-		if (currentBoard[row][col] != Piece.EMPTY){
+		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
+			squatItLikeItsHot.setGameOver(true);
 			return -1;
 		}
 		
 		//add move
-		currentBoard[row][col]=m.P;
+		currentBoard[row][col] = piece;
 		
 		//change board
 		board.setCells(currentBoard);
+		
+		
 		
 		return 0;
 	}
@@ -145,20 +154,37 @@ public class squatItLikeItsHot implements Player, Piece {
 	public static int getTallyB() {
 		return tallyB;
 	}
+	
 	public static void setTallyB(int tallyB) {
 		squatItLikeItsHot.tallyB = tallyB;
 	}
+	
 	public static int getTallyW() {
 		return tallyW;
 	}
+	
 	public static void setTallyW(int tallyW) {
 		squatItLikeItsHot.tallyW = tallyW;
 	}
+	
 	public static Boolean getGameOver() {
 		return gameOver;
 	}
+	
 	public static void setGameOver(Boolean gameOver) {
 		squatItLikeItsHot.gameOver = gameOver;
+	}
+	
+	public void setPlayerColour(int playerColour) {
+		this.playerColour = playerColour;
+	}
+
+	public int getOpponentColour() {
+		return opponentColour;
+	}
+
+	public void setOpponentColour(int opponentColour) {
+		this.opponentColour = opponentColour;
 	}
 
 }

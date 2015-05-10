@@ -1,2 +1,4 @@
 Luke - not sure how to categorise colours, thinking Colours.enum
 Luke - squatIt.makeMove(), return as object MOVE, what is P in move.java?
+Luke - dont understand why at referee line 76 it prints out each players board, why?
+Luke - does the output of 'Player one (White) indicate winner as: 0' have to return a string 'WHITE'?
