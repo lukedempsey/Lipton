@@ -16,8 +16,8 @@ public class squatItLikeItsHot implements Player, Piece {
 	
 	//Initialises game variables
 	private static Boolean debug = false;
-	private Colour playerColour;
-	private Colour opponentColour; //not sure if you can do this??
+	private int playerColour;
+	private int opponentColour; //not sure if you can do this??
 	
 	private static int tallyB = 0;
 	private static int tallyW = 0;
@@ -39,11 +39,11 @@ public class squatItLikeItsHot implements Player, Piece {
 		board = new Board(n);
 
 		if(p==1){
-			playerColour = Colour.WHITE;
-			opponentColour = Colour.BLACK;
+			playerColour = Piece.WHITE;
+			opponentColour = Piece.BLACK;
 		}else if(p==2){
-			playerColour = Colour.BLACK;
-			opponentColour = Colour.WHITE;
+			playerColour = Piece.BLACK;
+			opponentColour = Piece.WHITE;
 		}else{
 			//invalid input p != 1 or 2
 			return -1;
@@ -59,6 +59,24 @@ public class squatItLikeItsHot implements Player, Piece {
 		 * Note that each player needs to maintain its own internal state representation 
 		 * of the current board configuration
 		 */
+		
+		Move move = new Move();
+		
+		int dim = board.getBoardDims();
+		int[][] currentBoard = board.getCells();
+	
+		
+		for(int i=0; i<dim; i++){
+			for(int j=0; j<dim; j++){
+				if (currentBoard[i][j]==Piece.EMPTY){
+					move.Row = i;
+					move.Col = j;
+					move.P = this.playerColour;
+					return move;
+				}
+			}
+		}
+		
 		return null;
 	}
 
@@ -78,13 +96,17 @@ public class squatItLikeItsHot implements Player, Piece {
 		int[][] currentBoard = board.getCells();
 		
 		//check legal move
-		//TODO is this the only illegal move? Account for captured territories
+		//TODO is this the only illegal move? 
+		//Account for captured territories
+		//Account for wrong colour placed
 		if (currentBoard[row][col] != Piece.EMPTY){
 			return -1;
 		}
 		
+		//add move
 		currentBoard[row][col]=m.P;
 		
+		//change board
 		board.setCells(currentBoard);
 		
 		return 0;
