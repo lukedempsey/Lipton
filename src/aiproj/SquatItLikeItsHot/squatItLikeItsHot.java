@@ -22,6 +22,7 @@ public class squatItLikeItsHot implements Player, Piece {
 	private static int tallyB = 0;
 	private static int tallyW = 0;
 	private static Boolean gameOver = true;
+
 	
 	
 	@Override
@@ -101,6 +102,7 @@ public class squatItLikeItsHot implements Player, Piece {
 		 * corresponding to a captured Black piece, a captured White piece, or a captured empty cell, 
 		 * respectively.
 		*/
+		Board.printBoard(board);
 	}
 	
 	public static int getTallyB() {
