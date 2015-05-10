@@ -72,6 +72,21 @@ public class squatItLikeItsHot implements Player, Piece {
 		 Based on your board configuration, if your player thinks this move is illegal 
 		 you need to return -1 otherwise this function should return 0.
 		 */
+		int row = m.Row;
+		int col = m.Col;
+		
+		int[][] currentBoard = board.getCells();
+		
+		//check legal move
+		//TODO is this the only illegal move? Account for captured territories
+		if (currentBoard[row][col] != Piece.EMPTY){
+			return -1;
+		}
+		
+		currentBoard[row][col]=m.P;
+		
+		board.setCells(currentBoard);
+		
 		return 0;
 	}
 
