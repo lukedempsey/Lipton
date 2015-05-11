@@ -1,10 +1,10 @@
-package aiproj.squatItLikeItsHot;
+package aiproj.lukemason;
 import aiproj.squatter.*;
 
 import java.io.PrintStream;
 
 /**
- *  
+ *  v
  * @author lukedempsey 638407, mason rose-campbell 638370
  *
  */

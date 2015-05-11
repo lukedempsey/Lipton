@@ -1,4 +1,4 @@
-package aiproj.squatItLikeItsHot;
+package aiproj.lukemason;
 import aiproj.squatter.*;
 /* COMP30024 Artificial Intelligence - Squat it like it's hot
  * Modified from Project Part A: Testing for a Win

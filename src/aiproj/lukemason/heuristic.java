@@ -1,4 +1,4 @@
-package aiproj.squatItLikeItsHot;
+package aiproj.lukemason;
 
 /**
  *  
