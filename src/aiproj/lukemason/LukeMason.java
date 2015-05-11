@@ -22,7 +22,7 @@ public class LukeMason implements Player, Piece {
 
 	
 	private int playerColour;
-	private int opponentColour; //not sure if you can do this??
+	private int opponentColour;
 	
 	private static int tallyB = 0;
 	private static int tallyW = 0;
@@ -150,6 +150,7 @@ public class LukeMason implements Player, Piece {
 		 * respectively.
 		*/
 		Board.printBoard(board);
+		Heuristic.liberties(board, this);
 	}
 	
 	public static int getTallyB() {
