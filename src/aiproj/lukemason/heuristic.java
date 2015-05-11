@@ -8,6 +8,6 @@ package aiproj.lukemason;
  *
  */
 
-public class heuristic {
+public class Heuristic {
 
 }

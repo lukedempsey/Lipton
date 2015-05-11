@@ -78,7 +78,7 @@ public class Board {
 					if(debug){System.out.println("Found empty cell");}
 					
 					//change game state to not over
-					squatItLikeItsHot.setGameOver(false);
+					LukeMason.setGameOver(false);
 					return false;
 				}
 			}
@@ -111,13 +111,13 @@ public class Board {
 					
 					//Add to tally
 					if(lastCol==Piece.BLACK){
-						squatItLikeItsHot.setTallyB(squatItLikeItsHot.getTallyB() + 1);
+						LukeMason.setTallyB(LukeMason.getTallyB() + 1);
 					} else {
-						squatItLikeItsHot.setTallyW(squatItLikeItsHot.getTallyW() + 1);
+						LukeMason.setTallyW(LukeMason.getTallyW() + 1);
 					}
 					
 					//debug
-					if(debug){System.out.println("TallyW: "+squatItLikeItsHot.getTallyW()+", TallyB: "+squatItLikeItsHot.getTallyB());}
+					if(debug){System.out.println("TallyW: "+LukeMason.getTallyW()+", TallyB: "+LukeMason.getTallyB());}
 					
 				//If not captured, set to latest colour
 				} else {
