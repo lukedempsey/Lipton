@@ -5,3 +5,4 @@ Luke - squatIt.makeMove(), return as object MOVE, what is P in move.java?
 Luke - dont understand why at referee line 76 it prints out each players board, why?
 	SOLVED - to compare if the other people fucked up
 Luke - does the output of 'Player one (White) indicate winner as: 0' have to return a string 'WHITE'?
+Luke - Account for suicidal move

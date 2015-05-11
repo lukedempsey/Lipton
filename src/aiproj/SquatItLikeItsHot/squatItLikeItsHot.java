@@ -105,6 +105,7 @@ public class squatItLikeItsHot implements Player, Piece {
 		//TODO is this the only illegal move? 
 		//Account for captured territories
 		//Account for wrong colour placed
+		//TODO account for suicidal move
 		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
 			squatItLikeItsHot.setGameOver(true);
 			return -1;
