@@ -15,7 +15,7 @@ public class squatItLikeItsHot implements Player, Piece {
 	private static Board board;
 	
 	//Initialises game variables
-	private static boolean debug = false;
+	private static Boolean debug = false;
 	public int getPlayerColour() {
 		return playerColour;
 	}
@@ -26,7 +26,7 @@ public class squatItLikeItsHot implements Player, Piece {
 	
 	private static int tallyB = 0;
 	private static int tallyW = 0;
-	private static boolean gameOver = false;
+	private static Boolean gameOver = false;
 
 	
 	
