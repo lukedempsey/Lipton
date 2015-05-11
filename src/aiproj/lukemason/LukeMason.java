@@ -16,13 +16,9 @@ public class LukeMason implements Player, Piece {
 	
 	//Initialises game variables
 	private static Boolean debug = false;
-	public int getPlayerColour() {
-		return playerColour;
-	}
-
 	
 	private int playerColour;
-	private int opponentColour; //not sure if you can do this??
+	private int opponentColour;
 	
 	private static int tallyB = 0;
 	private static int tallyW = 0;
@@ -174,6 +170,10 @@ public class LukeMason implements Player, Piece {
 	
 	public static void setGameOver(Boolean gameOver) {
 		LukeMason.gameOver = gameOver;
+	}
+	
+	public int getPlayerColour() {
+		return playerColour;
 	}
 	
 	public void setPlayerColour(int playerColour) {

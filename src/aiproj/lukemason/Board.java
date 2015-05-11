@@ -138,21 +138,29 @@ public class Board {
 				int tmp = board.getCells()[i][j];
 				//TODO make cases for captured
 				switch(tmp){
-				case 0:
+				case Piece.EMPTY:
 					System.out.print("+");
 					break;
-				case 1:
+				case Piece.WHITE:
 					System.out.print("W");
 					break;
-				case 2:
+				case Piece.BLACK:
 					System.out.print("B");
 					break;
-				case 3:
-					System.out.print("fix this");
+				case Piece.DEAD:
+					for(int k=i; k<(dims-i); k++){
+						if(tmp == Piece.BLACK){
+							System.out.print("w");
+						}
+						else if(tmp == Piece.WHITE){
+							System.out.print("b");
+						} else {
+							System.out.print("Invalid board, dead piece isn't captured.");	// May not be necessary
+						} break;
+					}
 					break;
-					//TODO make error 
-				case -1:
-					System.out.print("Make and err message");
+				case Piece.INVALID:
+					System.out.print("Invalid board data. Probs Check that"); 	//Need to sort out when an invalid piece of data would get as far as this method
 					break;
 				}
 			}
