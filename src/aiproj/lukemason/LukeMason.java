@@ -1,15 +1,15 @@
-package aiproj.squatItLikeItsHot;
+package aiproj.lukemason;
 import aiproj.squatter.*;
 
 import java.io.PrintStream;
 
 /**
- * 
+ *  v
  * @author lukedempsey 638407, mason rose-campbell 638370
  *
  */
 
-public class squatItLikeItsHot implements Player, Piece {
+public class LukeMason implements Player, Piece {
 	
 	//Initialises game objects
 	private static Board board;
@@ -107,7 +107,7 @@ public class squatItLikeItsHot implements Player, Piece {
 		//Account for wrong colour placed
 		//TODO account for suicidal move
 		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
-			squatItLikeItsHot.setGameOver(true);
+			LukeMason.setGameOver(true);
 			return -1;
 		}
 		
@@ -157,7 +157,7 @@ public class squatItLikeItsHot implements Player, Piece {
 	}
 	
 	public static void setTallyB(int tallyB) {
-		squatItLikeItsHot.tallyB = tallyB;
+		LukeMason.tallyB = tallyB;
 	}
 	
 	public static int getTallyW() {
@@ -165,7 +165,7 @@ public class squatItLikeItsHot implements Player, Piece {
 	}
 	
 	public static void setTallyW(int tallyW) {
-		squatItLikeItsHot.tallyW = tallyW;
+		LukeMason.tallyW = tallyW;
 	}
 	
 	public static Boolean getGameOver() {
@@ -173,7 +173,7 @@ public class squatItLikeItsHot implements Player, Piece {
 	}
 	
 	public static void setGameOver(Boolean gameOver) {
-		squatItLikeItsHot.gameOver = gameOver;
+		LukeMason.gameOver = gameOver;
 	}
 	
 	public void setPlayerColour(int playerColour) {
