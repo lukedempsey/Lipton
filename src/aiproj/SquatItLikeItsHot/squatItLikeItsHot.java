@@ -4,7 +4,7 @@ import aiproj.squatter.*;
 import java.io.PrintStream;
 
 /**
- * 
+ *  
  * @author lukedempsey 638407, mason rose-campbell 638370
  *
  */
