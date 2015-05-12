@@ -4,8 +4,8 @@ import aiproj.squatter.*;
 import java.io.PrintStream;
 
 /**
- *  v
- * @author lukedempsey 638407, mason rose-campbell 638370
+ * 
+ * @author luke dempsey 638407, mason rose-campbell 638370
  *
  */
 
@@ -28,7 +28,7 @@ public class LukeMason implements Player, Piece {
 	
 	@Override
 	public int init(int n, int p) {
-		/** TODO - This method is called by the referee to initialise the player. 
+		/** This method is called by the referee to initialise the player. 
 		The input parameters are as follows: n specifies the board dimension,
 		and p specifies the piece that the player will use (according to the 
 		Piece interface format) as assigned to your class by the referee. 
@@ -46,7 +46,7 @@ public class LukeMason implements Player, Piece {
 			setPlayerColour(Piece.BLACK);
 			setOpponentColour(Piece.WHITE);
 		}else{
-			//invalid input p != 1 or 2
+			//invalid input (p != 1 or 2)
 			return -1;
 		}
 		return 0;
@@ -97,23 +97,21 @@ public class LukeMason implements Player, Piece {
 		
 		int[][] currentBoard = board.getCells();
 		
-		//check legal move
-		//TODO is this the only illegal move? 
-		//Account for captured territories
-		//Account for wrong colour placed
-		//TODO account for suicidal move
+		// TODO Account for captured territories and update board with dead cells
+		// Dead cells need new variables to differentiate. i.e. for a dead white cell, store as 4,
+		// for dead black store as 5, or for dead space store as 3.
+		
+		//check if the move made was valid
 		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
 			LukeMason.setGameOver(true);
 			return -1;
 		}
 		
-		//add move
+		//add moved piece to the board
 		currentBoard[row][col] = piece;
 		
 		//change board
 		board.setCells(currentBoard);
-		
-		
 		
 		return 0;
 	}
@@ -131,7 +129,7 @@ public class LukeMason implements Player, Piece {
 		
 		//Update game state
 		Board.state(debug, board, gameOver);
-		return Board.returnState(gameOver, tallyB, tallyW);
+		return Board.returnWinner(gameOver, tallyB, tallyW);
 
 	}
 

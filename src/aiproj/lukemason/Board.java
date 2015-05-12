@@ -34,8 +34,7 @@ public class Board {
 		if(debug)printBoard(this);
 
 	}
-	
-	
+		
 	/** Initialises the cells array
 	 * @param boardDims The dimensions of the board size
 	 */
@@ -44,7 +43,6 @@ public class Board {
 		
 	}	
 	
-
 	/** Reads in information from system input and fills cells array
 	 * with this data
 	 * @param cells Array to store board data
@@ -64,6 +62,10 @@ public class Board {
 		}
 	}
 	
+	/** Checks if the current board state satisfys an end game condition (someone has won)
+	 * @param board The board from which the game state is checked
+	 * @return A boolean for whether the game has ended or not
+	 */
 	public static boolean checkGameOver(Board board){
 		for(int row = 0; row < (board.getBoardDims()-1); row++){
 			for(int col = 0; col < (board.getBoardDims()-1); col++){
@@ -86,14 +88,13 @@ public class Board {
 		return true;
 	}
 
-	/** Finds the current game state by searching through the board
+	/** Finds the current game state (the scores of each player) by searching through the board
 	 * @param debug Boolean to turn debugging mode on and off
 	 * @param board Data will be examined about this board
 	 * @param gameOver Whether or not the game has finished or not
 	 */
 	public static void state(Boolean debug, Board board, Boolean gameOver) {
-		//TODO fix this sloppy initialisation
-		int lastCol = Piece.INVALID;
+		int lastCol = 0;
 		
 		//Check for game over
 		checkGameOver(board);
@@ -103,14 +104,15 @@ public class Board {
 		for(int row = 0; row < (board.getBoardDims()-1); row++){
 			for(int col = 0; col < (board.getBoardDims()-1); col++){
 				
-				//Check if captured
-				if (board.getCells()[row][col]==Piece.DEAD){
+				//Check points based on captured piece in each cell
+				//Check captured spaces
+				if (board.getCells()[row][col]==(CustomPiece.DEADSPACE)) {
 					
 					//debug
 					if(debug){System.out.println("Found a captured cell: "+row+","+col);}
 					
 					//Add to tally
-					if(lastCol==Piece.BLACK){
+					if(lastCol==CustomPiece.BLACK){
 						LukeMason.setTallyB(LukeMason.getTallyB() + 1);
 					} else {
 						LukeMason.setTallyW(LukeMason.getTallyW() + 1);
@@ -118,6 +120,20 @@ public class Board {
 					
 					//debug
 					if(debug){System.out.println("TallyW: "+LukeMason.getTallyW()+", TallyB: "+LukeMason.getTallyB());}
+				
+				//Check captured white pieces
+				} else if (board.getCells()[row][col]==(CustomPiece.DEADWHITE)) {
+					
+					if(lastCol==CustomPiece.BLACK){
+						LukeMason.setTallyB(LukeMason.getTallyB() + 1);
+					}
+				
+				//Check captured black pieces
+				} else if (board.getCells()[row][col]==(CustomPiece.DEADBLACK)) {
+					
+					if(lastCol==CustomPiece.WHITE){
+						LukeMason.setTallyW(LukeMason.getTallyW() + 1);
+					}
 					
 				//If not captured, set to latest colour
 				} else {
@@ -131,35 +147,34 @@ public class Board {
 		}
 	}
 
+	/** Prints the current game state to standard output
+	 * @param board The board from which the data is printed
+	 */
 	public static void printBoard(Board board){
 		int dims = board.getBoardDims();
 		for(int i=0; i<dims; i++){
 			for(int j=0; j<dims; j++){
 				int tmp = board.getCells()[i][j];
-				//TODO make cases for captured
-				switch(tmp){
-				case Piece.EMPTY:
+				switch(tmp) {
+				case CustomPiece.EMPTY:
 					System.out.print("+");
 					break;
-				case Piece.WHITE:
+				case CustomPiece.WHITE:
 					System.out.print("W");
 					break;
-				case Piece.BLACK:
+				case CustomPiece.BLACK:
 					System.out.print("B");
 					break;
-				case Piece.DEAD:
-					for(int k=i; k<(dims-i); k++){
-						if(tmp == Piece.BLACK){
-							System.out.print("w");
-						}
-						else if(tmp == Piece.WHITE){
-							System.out.print("b");
-						} else {
-							System.out.print("Invalid board, dead piece isn't captured.");	// May not be necessary
-						} break;
-					}
+				case CustomPiece.DEAD:
+					System.out.print("-");
 					break;
-				case Piece.INVALID:
+				case CustomPiece.DEADWHITE:
+					System.out.print("w");
+					break;
+				case CustomPiece.DEADBLACK:
+					System.out.print("b");
+					break;
+				case CustomPiece.INVALID:
 					System.out.print("Invalid board data. Probs Check that"); 	//Need to sort out when an invalid piece of data would get as far as this method
 					break;
 				}
@@ -168,12 +183,13 @@ public class Board {
 		}
 	}
 	
-/** Prints the current state of the board
+	/** Returns the results of the game
 	 * @param gameOver Whether the game has finished or not
 	 * @param tallyB How many cells Black player has claimed 
 	 * @param tallyW How many cells White player has claimed
 	 */
-	public static int returnState(Boolean gameOver, int tallyB, int tallyW){
+	public static int returnWinner(Boolean gameOver, int tallyB, int tallyW){
+		//TODO check whenever an illegal move is made that Piece.INVALID is returned
 		if(gameOver) {
 			if(tallyB==tallyW) {
 				return Piece.DEAD;
@@ -182,11 +198,10 @@ public class Board {
 			} else {
 				return Piece.WHITE;
 			}
-		}else{
+		} else {
 			return Piece.EMPTY;
 		}
 	}
-	
 	
 	/** Setter for cells
 	 * @param cells Array of data about cells on the board
