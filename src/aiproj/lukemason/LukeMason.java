@@ -98,13 +98,11 @@ public class LukeMason implements Player, Piece {
 		int[][] currentBoard = board.getCells();
 		
 		// TODO Account for captured territories and update board with dead cells
-		// Dead cells need new variables to differentiate. i.e. for a dead white cell, store as 4,
-		// for dead black store as 5, or for dead space store as 3.
 		
 		//check if the move made was valid
 		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
 			LukeMason.setGameOver(true);
-			return -1;
+			return Piece.INVALID;
 		}
 		
 		//add moved piece to the board
