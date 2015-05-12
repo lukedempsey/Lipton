@@ -67,8 +67,8 @@ public class Board {
 	 * @return A boolean for whether the game has ended or not
 	 */
 	public static boolean checkGameOver(Board board){
-		for(int row = 0; row < (board.getBoardDims()-1); row++){
-			for(int col = 0; col < (board.getBoardDims()-1); col++){
+		for(int row = 0; row < board.getBoardDims(); row++){
+			for(int col = 0; col < board.getBoardDims(); col++){
 				
 				//debug
 				if(debug){System.out.println("Checking "+row+","+col+":"+board.getCells()[row][col]);}
@@ -79,12 +79,12 @@ public class Board {
 					//debug
 					if(debug){System.out.println("Found empty cell");}
 					
-					//change game state to not over
-					LukeMason.setGameOver(false);
+					//game state is not over
 					return false;
 				}
 			}
 		}
+		//game state is over
 		return true;
 	}
 
@@ -93,11 +93,11 @@ public class Board {
 	 * @param board Data will be examined about this board
 	 * @param gameOver Whether or not the game has finished or not
 	 */
-	public static void state(Boolean debug, Board board, Boolean gameOver) {
+	public static void state(Boolean debug, Board board) {
 		int lastCol = 0;
 		
-		//Check for game over
-		checkGameOver(board);
+		//Update whether or not the game is over
+		LukeMason.setGameOver(checkGameOver(board));
 		
 		//Search for a captured point
 		//Skip cells on bottom & right edges

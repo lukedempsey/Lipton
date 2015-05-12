@@ -128,7 +128,7 @@ public class LukeMason implements Player, Piece {
 		*/
 		
 		//Update game state
-		Board.state(debug, board, gameOver);
+		Board.state(debug, board);
 		return Board.returnWinner(gameOver, tallyB, tallyW);
 
 	}
