@@ -147,6 +147,45 @@ public class Board {
 		}
 	}
 
+	public static CaptureNode[] findLoop(int[][] currentBoard, CaptureNode[] deadcells, Move move, int colour, int direction) {
+		
+			
+		
+		//Keep locations of dead cells up to date
+		if ((deadcells[move.Row].getMax() == -1)|(deadcells[move.Row].getMax()>move.Col)) {
+			deadcells[move.Row].setMax(move.Col);
+		} if ((deadcells[move.Row].getMin() == -1)|(deadcells[move.Row].getMin()>move.Col)) {
+			deadcells[move.Row].setMin(move.Col);
+		}
+		
+		// make small formulas for each adjacent cell, keeping in mind direction
+		// make sure lateral cells have prefernce to diagonal ones
+		// make sure to check if the cell is within the bounds of the board (coordinates dont exceed dims or go below 0)
+		// also check that the cell has a piece of the same colour
+		// keep recurring until the same initial point is reached {BASE CASE}
+		
+		return deadcells;
+	}
+	
+	public static int[][] findCaptured(CaptureNode[] deadcells, int[][] currentBoard, int dims) {
+		
+		// change all required cells to dead
+		for(int i=0; i<dims; i++){
+			for(int j = deadcells[i].getMin(); j<= deadcells[i].getMax(); j++){
+				if(j==Piece.BLACK) {
+					currentBoard[i][j] = CustomPiece.DEADBLACK;
+				} else if(j==Piece.WHITE) {
+					currentBoard[i][j] = CustomPiece.DEADWHITE;
+				} else if(j==Piece.EMPTY) {
+					currentBoard[i][j] = CustomPiece.DEADSPACE;
+				}
+			}
+		}
+		
+		//return the updated board cells
+		return currentBoard;
+	}
+	
 	/** Prints the current game state to standard output
 	 * @param board The board from which the data is printed
 	 */

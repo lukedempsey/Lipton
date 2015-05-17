@@ -15,14 +15,14 @@ public class LukeMason implements Player, Piece {
 	private static Board board;
 	
 	//Initialises game variables
-	private static Boolean debug = false;
+	private static boolean debug = false;
 	
 	private int playerColour;
 	private int opponentColour;
 	
 	private static int tallyB = 0;
 	private static int tallyW = 0;
-	private static Boolean gameOver = false;
+	private static boolean gameOver = false;
 
 	
 	
@@ -95,9 +95,9 @@ public class LukeMason implements Player, Piece {
 		int col = m.Col;
 		int piece = m.P;
 		
+		int dim = board.getBoardDims();
 		int[][] currentBoard = board.getCells();
-		
-		// TODO Account for captured territories and update board with dead cells
+		CaptureNode[] deadcells = new CaptureNode[dim];
 		
 		//check if the move made was valid
 		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
@@ -107,6 +107,11 @@ public class LukeMason implements Player, Piece {
 		
 		//add moved piece to the board
 		currentBoard[row][col] = piece;
+		
+		// TODO Account for captured territories and update board with dead cells
+		// FIX the direction part and properly search for the adjacent cells to piece
+		deadcells = board.findLoop(currentBoard, deadcells, m, m.P, 0);
+		currentBoard = board.findCaptured(deadcells, currentBoard, dim);
 		
 		//change board
 		board.setCells(currentBoard);
@@ -160,7 +165,7 @@ public class LukeMason implements Player, Piece {
 		LukeMason.tallyW = tallyW;
 	}
 	
-	public static Boolean getGameOver() {
+	public static boolean getGameOver() {
 		return gameOver;
 	}
 	
