@@ -149,8 +149,6 @@ public class Board {
 
 	public static CaptureNode[] findLoop(int[][] currentBoard, CaptureNode[] deadcells, Move move, int colour, int direction) {
 		
-			
-		
 		//Keep locations of dead cells up to date
 		if ((deadcells[move.Row].getMax() == -1)|(deadcells[move.Row].getMax()>move.Col)) {
 			deadcells[move.Row].setMax(move.Col);
@@ -158,10 +156,12 @@ public class Board {
 			deadcells[move.Row].setMin(move.Col);
 		}
 		
-		// make small formulas for each adjacent cell, keeping in mind direction
-		// make sure lateral cells have prefernce to diagonal ones
-		// make sure to check if the cell is within the bounds of the board (coordinates dont exceed dims or go below 0)
-		// also check that the cell has a piece of the same colour
+		if(direction == 0 & currentBoard[move.Row+1][move.Col]==colour & move.Row+1<currentBoard.length) {
+			
+		}
+		// go in the same direction as before if lateral
+		// otherwise find next like coloured cell, lateral cells have prefernce to diagonal ones
+		// check if the cell is within the bounds of the board (coordinates dont exceed dimensions or go below 0)
 		// keep recurring until the same initial point is reached {BASE CASE}
 		
 		return deadcells;
