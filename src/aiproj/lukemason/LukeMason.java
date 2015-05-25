@@ -64,12 +64,12 @@ public class LukeMason implements Player, Piece {
 		Move move = new Move();
 		
 		int dim = board.getBoardDims();
-		int[][] currentBoard = board.getCells();
+		int[][] currentCells = board.getCells();
 	
 		
 		for(int i=0; i<dim; i++){
 			for(int j=0; j<dim; j++){
-				if (currentBoard[i][j]==Piece.EMPTY){
+				if (currentCells[i][j]==Piece.EMPTY){
 					move.Row = i;
 					move.Col = j;
 					move.P = this.playerColour;
@@ -95,26 +95,25 @@ public class LukeMason implements Player, Piece {
 		int col = m.Col;
 		int piece = m.P;
 		
-		int dim = board.getBoardDims();
-		int[][] currentBoard = board.getCells();
-		CaptureNode[] deadcells = new CaptureNode[dim];
+		int[][] currentCells = board.getCells();
+		int[] deadcells = board.getDeadCells();
+		
 		
 		//check if the move made was valid
-		if (currentBoard[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
+		if (currentCells[row][col] != Piece.EMPTY | piece!= getOpponentColour() | getGameOver()==true){
 			LukeMason.setGameOver(true);
 			return Piece.INVALID;
 		}
 		
 		//add moved piece to the board
-		currentBoard[row][col] = piece;
+		currentCells[row][col] = piece;
 		
 		// TODO Account for captured territories and update board with dead cells
-		// FIX the direction part and properly search for the adjacent cells to piece
-		deadcells = board.findLoop(currentBoard, deadcells, m, m.P, 0);
-		currentBoard = board.findCaptured(deadcells, currentBoard, dim);
+		Board.floodfill(currentCells, m.Row, m.Col, m.P, board);
+		currentCells = Board.updateDead(currentCells, deadcells);
 		
 		//change board
-		board.setCells(currentBoard);
+		board.setCells(currentCells);
 		
 		return 0;
 	}

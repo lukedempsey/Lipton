@@ -13,7 +13,8 @@ public class Board {
 	
 	//Board variables
 	private int boardDims;
-	private static int[][] cells;
+	private int[][] cells = null;
+	private int[] deadcells = null;
 	
 	private static boolean debug = false;
 	
@@ -26,43 +27,38 @@ public class Board {
 		//check to validate input
 		boardDims = n;
 		
-		//initialise and fill the board
-		initBoard(boardDims, cells);
+		//Initialises the cells and dead cells arrays
+		cells = new int[boardDims][boardDims];
+		deadcells = new int[(boardDims-2)*(boardDims-2)];
 
-		fillBoard(boardDims, cells);
+		//Fill the cells and deadcell arrays
+		fillBoard(boardDims, cells, deadcells);
 		
 		if(debug)printBoard(this);
 
 	}
-		
-	/** Initialises the cells array
-	 * @param boardDims The dimensions of the board size
-	 */
-	public static void initBoard(int boardDims, int[][] cells){
-		Board.cells = new int[boardDims][boardDims];
-		
-	}	
 	
 	/** Reads in information from system input and fills cells array
 	 * with this data
 	 * @param cells Array to store board data
 	 */
-	public static void fillBoard(int boardDims, int[][] cells) {
+	public static void fillBoard(int boardDims, int[][] cells, int[] deadcells) {
 		
-		int col = 0;
-		int row = 0;
-		
-		while(row<boardDims){
-			while(col<boardDims){
+		// initialise board elements to empty
+		for(int row=0;row<boardDims; row++){
+			for(int col=0;col<boardDims; col++){
 				cells[row][col] = Piece.EMPTY;
-				col++;
 			}
-			row++;
-			col=0;
 		}
+		
+		// initialise deadcell hashtable to be invalid
+		for(int i=0; i<deadcells.length; i++) {
+			deadcells[i] = Piece.INVALID;
+		}
+		
 	}
 	
-	/** Checks if the current board state satisfys an end game condition (someone has won)
+	/** Checks if the current board state satisfys an end game condition 
 	 * @param board The board from which the game state is checked
 	 * @return A boolean for whether the game has ended or not
 	 */
@@ -73,7 +69,7 @@ public class Board {
 				//debug
 				if(debug){System.out.println("Checking "+row+","+col+":"+board.getCells()[row][col]);}
 				
-				//Look to see if game is finished
+				//Look to see if game is finished by looking for empty cells
 				if (board.getCells()[row][col]==Piece.EMPTY) {
 					
 					//debug
@@ -88,7 +84,8 @@ public class Board {
 		return true;
 	}
 
-	/** Finds the current game state (the scores of each player) by searching through the board
+	/** Finds the current game state (the scores of each player) by searching
+	 *  through the board
 	 * @param debug Boolean to turn debugging mode on and off
 	 * @param board Data will be examined about this board
 	 * @param gameOver Whether or not the game has finished or not
@@ -147,43 +144,59 @@ public class Board {
 		}
 	}
 
-	public static CaptureNode[] findLoop(int[][] currentBoard, CaptureNode[] deadcells, Move move, int colour, int direction) {
-		
-		//Keep locations of dead cells up to date
-		if ((deadcells[move.Row].getMax() == -1)|(deadcells[move.Row].getMax()>move.Col)) {
-			deadcells[move.Row].setMax(move.Col);
-		} if ((deadcells[move.Row].getMin() == -1)|(deadcells[move.Row].getMin()>move.Col)) {
-			deadcells[move.Row].setMin(move.Col);
+	/** Inspired by the floodfill algorithm, finds the dead cells and stores
+	 * their location in a hash table called deadcells
+	 * @param currentCells current state of cells on the board
+	 * @param row row location of current cell being analysed
+	 * @param col column location of current cell being analysed
+	 * @param colour colour of the boundary (capturing) cells
+	 * @param board the board of the current game
+	 * @return a number based on whether a boundary or board edge was found
+	 */
+	public static int floodfill(int[][] currentCells, int row, int col,
+			int colour, Board board) {
+		//TODO test this, because it probably doesn't work at all
+		int dim = currentCells.length;
+		if(row<0|col<0|row>=dim|col>=dim) {
+			return -1;
+		} else if (currentCells[row][col] == colour) {
+			return 0;
+		} else {
+			int up = floodfill(currentCells, row-1, col, colour, board);
+			int down = floodfill(currentCells, row+1, col, colour, board);
+			int left = floodfill(currentCells, row, col-1, colour, board);
+			int right = floodfill(currentCells, row, col+1, colour, board);
+			if(up==0 & down==0 & left==0 & right==0) {
+				board.setDeadCells((row-1)*(dim-2)+(col-1), 1);
+				return 0;
+			}
+			return -1;
 		}
-		
-		if(direction == 0 & currentBoard[move.Row+1][move.Col]==colour & move.Row+1<currentBoard.length) {
-			
-		}
-		// go in the same direction as before if lateral
-		// otherwise find next like coloured cell, lateral cells have prefernce to diagonal ones
-		// check if the cell is within the bounds of the board (coordinates dont exceed dimensions or go below 0)
-		// keep recurring until the same initial point is reached {BASE CASE}
-		
-		return deadcells;
 	}
 	
-	public static int[][] findCaptured(CaptureNode[] deadcells, int[][] currentBoard, int dims) {
+	/** updates the board data to include the newly captured (dead) cells
+	 * @param currentCells state of the current cells of the board
+	 * @param deadcells the array containing the captured cells
+	 * @return returns the updated cell data, with captured cells now marked as dead
+	 */
+	public static int[][] updateDead(int[][] currentCells, int[] deadcells){
 		
-		// change all required cells to dead
-		for(int i=0; i<dims; i++){
-			for(int j = deadcells[i].getMin(); j<= deadcells[i].getMax(); j++){
-				if(j==Piece.BLACK) {
-					currentBoard[i][j] = CustomPiece.DEADBLACK;
-				} else if(j==Piece.WHITE) {
-					currentBoard[i][j] = CustomPiece.DEADWHITE;
-				} else if(j==Piece.EMPTY) {
-					currentBoard[i][j] = CustomPiece.DEADSPACE;
-				}
+		for(int i=1; i<currentCells.length-1; i++) {
+			for(int j =1; j<currentCells.length-1; j++) {
+				int tmp = deadcells[(i-1)*(currentCells.length-2)+(j-1)];
+				if( tmp != Piece.INVALID) {
+					if(j==Piece.BLACK) {
+						currentCells[i][j] = CustomPiece.DEADBLACK;
+					} else if(j==Piece.WHITE) {
+						currentCells[i][j] = CustomPiece.DEADWHITE;
+					} else if(j==Piece.EMPTY) {
+						currentCells[i][j] = CustomPiece.DEADSPACE;
+					}
+				}	
 			}
 		}
 		
-		//return the updated board cells
-		return currentBoard;
+		return currentCells;
 	}
 	
 	/** Prints the current game state to standard output
@@ -228,7 +241,7 @@ public class Board {
 	 * @param tallyW How many cells White player has claimed
 	 */
 	public static int returnWinner(Boolean gameOver, int tallyB, int tallyW){
-		//TODO check whenever an illegal move is made that Piece.INVALID is returned
+		
 		if(gameOver) {
 			if(tallyB==tallyW) {
 				return Piece.DEAD;
@@ -246,7 +259,13 @@ public class Board {
 	 * @param cells Array of data about cells on the board
 	 */
 	public void setCells(int[][] cells) {
-		Board.cells = cells;
+		this.cells = cells;
+	}
+	
+	/** Getter for cells data string
+	 */
+	public int[][] getCells() {
+		return cells;
 	}
 	
 	/** Getter for board dimensions
@@ -255,9 +274,17 @@ public class Board {
 		return boardDims;
 	}
 	
-	/** Getter for cells data string
+	/** Setter for dead cells
+	 * @param i index in the deadcells array
+	 * @param x element to be set at index i
 	 */
-	public int[][] getCells() {
-		return cells;
+	public void setDeadCells(int i, int x) {
+		this.deadcells[i] = x;
+	}
+	
+	/** Getter for deadcells
+	 */
+	public int[] getDeadCells(){
+		return this.deadcells;
 	}
 }
